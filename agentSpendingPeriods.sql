@@ -2,7 +2,7 @@ SELECT DISTINCT np."networkID",
     spp."spendingPeriodID", asu."agentName", asu."email", cp."fixedCampaignName" AS "Tier", cp."campaignTierID", asu."agentBalance", spp."dailySpendLimit" * 0.01 AS "dailySpendLimit",
     spp."dowSun" AS "Sunday", spp."dowMon" AS "Monday", spp."dowTue" AS "Tuesday", spp."dowWed" AS "Wednesday", spp."dowThu" AS "Thursday", spp."dowFri" AS "Friday",
     spp."dowSat" AS "Saturday", spp."startTime"/60 AS "hoursToStart", spp."endTime"/60 AS "hoursToEnd", spp."paused", spp."throttleLeadsPer"/60 AS "throttlingSeconds",
-    spp."throttleNoMoreThan", CASE WHEN lsp."spend" IS NOT NULL THEN lsp."spend" ELSE 0 END AS "spend"
+    spp."throttleNoMoreThan", COALESCE(lsp."spend", 0) AS "spend"
 FROM public.mv_networkprice_IDs np
     INNER JOIN public.campaigns_prod cp
         ON np."priceTierID" = cp."campaignTierID"
