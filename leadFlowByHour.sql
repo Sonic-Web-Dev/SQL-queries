@@ -9,7 +9,7 @@ FROM public.leads_prod lp
    separated by a comma if there are multiple networks you want to filter for. */
 WHERE lp."networkID" IN ({{ networkid }})
   AND "leadResult" = 'Accepted'
-  AND DATE_TRUNC('hour', "created") >= DATE(NOW()) - INTERVAL '45 days'
+  AND DATE_TRUNC('hour', "created") >= DATE(NOW()) - INTERVAL '7 days'
 
 GROUP BY "date", "vendorID", "layerID") q
 
