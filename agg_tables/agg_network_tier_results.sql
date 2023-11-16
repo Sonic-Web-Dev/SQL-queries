@@ -31,7 +31,7 @@ FROM public.leads_sold_prod lsp
   LEFT JOIN public.lead_conversions lc
     ON lsp."leadID" = lc."leadID"
 WHERE lp."networkID" IN ('1fd7e926-574e-4e28-900a-c0f09af004ee', '187bf812-09e0-4a6a-b762-f80b93cadc62', '1d485dd6-3d27-4a9d-99b2-c7dfe6789874', '2af2616d-1878-447f-b88d-f999325d0827')
-  AND DATE(lsp."soldDate") >= DATE(NOW()) - INTERVAL '60 days'
-  AND DATE(lsp."soldDate") <= DATE(NOW()) - INTERVAL '14 days'
+  AND DATE_TRUNC('day', lsp."soldDate") >= DATE(NOW()) - INTERVAL '60 days'
+  AND DATE_TRUNC('day', lsp."soldDate") <= DATE(NOW()) - INTERVAL '14 days'
   AND lsp."agentID" IS NOT NULL
 GROUP BY ptp."networkID", ptp."name", lp."layerID", "ageRange", "incomeRange", "householdRange";
