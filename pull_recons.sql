@@ -3,6 +3,6 @@
 -- soldDate is based on UTC time
 SELECT *
 FROM sara_recons
-WHERE "soldDates" >= '2023-11-01'::timestamp + INTERVAL '5 hours' AND "soldDates" <= '2023-11-16'::timestamp + INTERVAL '5 hours'
+WHERE "soldDates" >= '2023-11-01'::timestamp + INTERVAL '5 hours' AND "soldDates" <= '2023-11-16'::timestamp + INTERVAL '4 hours'
     --AND "networkID" = 'paste in network id here'
 ;
