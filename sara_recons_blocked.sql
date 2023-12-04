@@ -1,4 +1,4 @@
-CREATE TABLE sara_recons_blocked AS
+CREATE MATERIALIZED VIEW sara_recons_blocked AS
 SELECT DATE_TRUNC('hour', lp."created") AS "createdDate", lp."networkID",
        CASE WHEN lpp."isBlacklisted" = true THEN 'blacklisted'
             WHEN lp."requestResult" = 'ushgGTB duplicate' AND lp."isDuplicate" = false THEN 'blacklisted'

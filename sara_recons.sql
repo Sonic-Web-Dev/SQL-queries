@@ -1,5 +1,5 @@
 /* Table for Total sums of EACH Network's Counts (not including blocked) */
-CREATE TABLE sara_recons AS
+CREATE MATERIALIZED VIEW sara_recons AS
 SELECT DATE_TRUNC('hour', lsp."soldDate") AS "soldDates", lp."networkID", lp."vendorID", lsp."agentID", ap."email", ptp."name" AS "tier", lp."leadType", ptp."priceTierID" AS "tierID",
        COUNT(lsp."leadID") AS "lead count",
        SUM(CASE WHEN lsp."price" IS NOT NULL THEN lsp."price" ELSE 0 END) * 0.01 AS "agent spend",
