@@ -1,5 +1,7 @@
 CREATE MATERIALIZED VIEW sara_recons_blocked AS
-SELECT DATE_TRUNC('hour', lp."created") AS "createdDate", lp."networkID",
+SELECT DATE_TRUNC('hour', lp."created") AS "createdDate",
+       lp."networkID",
+       np."brokerID",
        CASE WHEN lpp."isBlacklisted" = true THEN 'blacklisted'
             WHEN lp."requestResult" = 'ushgGTB duplicate' AND lp."isDuplicate" = false THEN 'blacklisted'
             WHEN lp."requestResult" IS NOT NULL THEN lrx."leadResult"
@@ -16,10 +18,12 @@ FROM public.leads_prod lp
     ON lp."leadID" = lpp."leadID"
   LEFT JOIN public.lead_result_xref lrx
     ON lp."requestResult" = lrx."requestResult"
+  LEFT JOIN public.networks_prod np
+    ON lp."networkID" = np."networkID"
 
 WHERE DATE_TRUNC('day', lp."created") >= '2023-01-01'
   AND lp."leadType" != 'recycled'
   AND lp."leadResult" != 'Accepted'
 
-GROUP BY "createdDate", lp."networkID", lp."leadResult", lp."vendorID", lp."requestResult", lrx."leadResult", lp."isDuplicate", lpp."isBlacklisted"
+GROUP BY "createdDate", lp."networkID", np."brokerID", lp."leadResult", lp."vendorID", lp."requestResult", lrx."leadResult", lp."isDuplicate", lpp."isBlacklisted"
 ORDER BY COUNT(lp."leadID") DESC;
