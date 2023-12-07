@@ -7,6 +7,7 @@ SELECT DATE_TRUNC('hour', lp."created") AS "createdDate",
             WHEN lp."requestResult" IS NOT NULL THEN lrx."leadResult"
             ELSE CAST(lp."leadResult" AS varchar(100)) END AS "leadResult",
        lp."vendorID",
+       CASE WHEN mst."strategy" = 'buy_only_cheap' THEN true ELSE false END AS "mlLeads",
        COUNT(lp."leadID") AS "total blocked",
        SUM(CASE WHEN lpp."isOriginal" = true THEN 1 ELSE 0 END) AS "unique vendor",
        SUM(CASE WHEN lp."requestResult" LIKE '%ushgGTB%' THEN 1 ELSE 0 END) AS "gtb checks",
@@ -20,10 +21,13 @@ FROM public.leads_prod lp
     ON lp."requestResult" = lrx."requestResult"
   LEFT JOIN public.networks_prod np
     ON lp."networkID" = np."networkID"
+  LEFT JOIN public.ml_strategy_tracking mst
+    ON lp."layerID" = mst."layerID"
 
 WHERE DATE_TRUNC('day', lp."created") >= '2023-01-01'
   AND lp."leadType" != 'recycled'
   AND lp."leadResult" != 'Accepted'
 
-GROUP BY "createdDate", lp."networkID", np."brokerID", lp."leadResult", lp."vendorID", lp."requestResult", lrx."leadResult", lp."isDuplicate", lpp."isBlacklisted"
+GROUP BY "createdDate", lp."networkID", np."brokerID", lp."leadResult", lp."vendorID", lp."requestResult",
+         lrx."leadResult", lp."isDuplicate", lpp."isBlacklisted", mst."strategy"
 ORDER BY COUNT(lp."leadID") DESC;
