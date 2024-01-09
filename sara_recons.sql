@@ -23,7 +23,7 @@ FROM public.leads_prod lp
   LEFT JOIN public.networks_prod np
     ON lp."networkID" = np."networkID"
 
-WHERE lsp."soldDate" >= '2023-01-01'
+WHERE DATE_TRUNC('day', lsp."soldDate") >= '2023-01-01'
 
 GROUP BY "soldDates", lp."networkID", np."brokerID", lp."vendorID", lsp."agentID", ap."email", "tier", lp."leadType", ptp."priceTierID"
 ORDER BY COUNT(lsp."leadID") DESC;
