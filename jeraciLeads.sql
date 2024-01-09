@@ -23,5 +23,4 @@ FROM leads_prod lp
     ON lsp."leadID" = rrp."leadId"
 
 WHERE lp."networkID" = 'efce69f6-1775-4ffa-ac72-d0df9d47a361'
-    AND LOWER(lp."vendorID") LIKE '%healthcare%'
-    AND DATE(lp."created") >= '2023-12-01';
+    AND DATE_TRUNC(lp."created") >= '2024-01-01';
