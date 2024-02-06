@@ -26,7 +26,7 @@ FROM public.leads_prod lp
 
 WHERE DATE_TRUNC('day', lp."created") >= '2023-01-01'
   AND lp."leadType" != 'recycled'
-  AND lp."leadResult" != 'Accepted'
+  AND (lp."leadResult" != 'Accepted' OR lrx."leadResult" != 'accepted')
 
 GROUP BY "createdDate", lp."networkID", np."brokerID", lp."leadResult", lp."vendorID", lp."requestResult",
          lrx."leadResult", lp."isDuplicate", lpp."isBlacklisted", mst."strategy"
